@@ -1,13 +1,14 @@
-FROM node:12-alpine
+FROM oven/bun:1-alpine
 
 WORKDIR /excalidraw-room
 
-COPY package.json yarn.lock ./
-RUN yarn
+COPY package.json bun.lockb ./
+RUN bun install --frozen-lockfile
 
-COPY tsconfig.json ./
 COPY src ./src
-RUN yarn build
+COPY public ./public
+COPY tsconfig.json ./
 
-EXPOSE 80
-CMD ["yarn", "start"]
+ENV NODE_ENV=production
+EXPOSE 3000
+CMD ["bun", "src/index.ts"]
